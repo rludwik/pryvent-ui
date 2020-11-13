@@ -1,24 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, SafeAreaView, Platform } from 'react-native';
+import Login from './app/screens/Login'
 
 export default function App() {
-  console.log("Working")
+
+  //TODO: Make an onPress event that fires data to the API
+
   return (
-    <View style={styles.container}>
-      <Text>Pryvent</Text>
-      <TextInput placeholder="Username" />
-      <TextInput placeholder="Password" />
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+          <Login />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    backgroundColor: '#8FCBFF',
+    alignItems: 'baseline',
+    flexDirection: "row",
+    justifyContent: 'space-evenly',
+    paddingTop: Platform.OS === 'android' ? 25 : 0,
+  }
 });
