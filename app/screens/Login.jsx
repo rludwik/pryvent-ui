@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, SafeAreaView, TouchableOpacity, Text, View, Image } from 'react-native';
-import LoginForm from '../screens/LoginForm'
+import { StyleSheet, SafeAreaView, Text, View, Image, KeyboardAvoidingView } from 'react-native';
+import LoginForm from '../screens/LoginForm';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function Login(props) {
   
@@ -8,21 +9,30 @@ export default function Login(props) {
   
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image style={styles.img} source={require('../../assets/pryvent-logo.png')} />
-        <Text style={styles.title}>Pryvent</Text>
-      </View>
-      <View style={styles.formContainer}>
-        <LoginForm />
-      </View>
+      <KeyboardAwareScrollView>
+        <View style={styles.logoContainer}>
+          <Image style={styles.img} source={require('../../assets/pryvent-logo.png')} />
+          <Text style={styles.title}>Pryvent</Text>
+        </View>
+        <View style={styles.formContainer}>
+          <LoginForm navigation={props.navigation} />
+        </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#8FCBFF',
+  },
   background:{
     flex: 1,
     flexDirection: 'row',
+  },
+  formContainer: {
+    top: 50
   },
   title: {
     color: '#083B66',
@@ -36,11 +46,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexGrow: 1,
     justifyContent: 'center',
+    top: 50
   },
   img: {
     resizeMode: 'contain',
     position: 'absolute',
-    top:40,
+    top:10,
   }
 })
 

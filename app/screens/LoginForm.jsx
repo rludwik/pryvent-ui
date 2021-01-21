@@ -1,28 +1,51 @@
-import React from 'react';
-import {TextInput, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { Component } from 'react';
+import {TextInput, View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native';
+import { Ionicons, Entypo  } from '@expo/vector-icons';
 
-function LoginForm(props) {
+export default class LoginForm extends Component {
 
-  const AppButton = ({ onPress, title }) => (
-    <TouchableOpacity onPress={onPress} style={styles.appButtonContainer}>
-      <Text style={styles.appButtonText}>{title}</Text>
-    </TouchableOpacity>
-  );
+  constructor() {
+    super();
+    
+    this.state = {
+      isPasswordShown: false
+    };
+  }
 
+  togglePasswordVisiblity = () => {
+    const { isPasswordShown } = this.state;
+    this.setState({ isPasswordShown: !isPasswordShown });
+  };
+
+  render(){
+    const AppButton = (props) => (
+      <TouchableOpacity onPress={() => props.navigation.navigate(props.nextPage)} style={styles.appButtonContainer}>
+        <Text style={styles.appButtonText}>{props.title}</Text>
+      </TouchableOpacity>
+    );
   
-  return (
-    <View style={styles.container}>
-      <View style={{marginBottom: 80, alignContent: 'center'}}>
-        <TextInput placeholder="Username" placeholderTextColor="#777" style={styles.input} ></TextInput>
-        <TextInput  placeholder="Password" placeholderTextColor="#777" style={styles.input} secureTextEntry={true} ></TextInput>
-        <Text>Forgot Password?</Text>
+    return (
+      <View style={styles.container}>
+        <View style={{marginBottom: 80, alignContent: 'center'}}>
+          <TextInput placeholder="Username" placeholderTextColor="#777" style={styles.input} ></TextInput>
+          <TextInput  placeholder="Password" placeholderTextColor="#777" style={styles.input} secureTextEntry={this.state.isPasswordShown ? false : true}></TextInput>
+          <View>
+            <Text>
+              <Entypo onPress={this.togglePasswordVisiblity} name={this.state.isPasswordShown ? 'eye' : 'eye-with-line'} size={25} color='black' />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Text>Forgot Password?</Text>
+            </Text>
+          </View>
+        </View>
+        <View style={{marginBottom: 180, alignContent: 'center'}}>
+        <AppButton title="Login" navigation={this.props.navigation} nextPage='Home'/>
+        <AppButton title="Create Account" navigation={this.props.navigation} nextPage='Register'/>
+        </View>
       </View>
-      <View style={{marginBottom: 30, alignContent: 'center'}}>
-      <AppButton title="Login" />
-      <AppButton title="Create Account" />
-      </View>
-    </View>
-  );
+    );
+  }
+  
 }
 
 const styles = StyleSheet.create({
@@ -30,14 +53,14 @@ const styles = StyleSheet.create({
     padding: 15,
     alignContent: 'center',
     justifyContent: 'center',
+    top: 10
   },
   input: {
    height: 40,
-   backgroundColor: 'rgba(255,255,255,0.4)',
+   backgroundColor: 'rgba(255,255,255,0.75)',
    marginBottom: 10,
-   borderRadius: 6
-  },
-  button: {
+   borderRadius: 6,
+   paddingLeft: 10
   },
   appButtonContainer: {
     elevation: 8,
@@ -59,4 +82,3 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 })
-export default LoginForm;
