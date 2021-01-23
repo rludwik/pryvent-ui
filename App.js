@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from './app/screens/Login';
 import Register from './app/screens/Register';
 import Home from './app/screens/Home';
+import { LinearGradient } from 'expo-linear-gradient';
+
  
 const Stack = createStackNavigator();
 
@@ -15,7 +17,7 @@ function App( {navigation}) {
       <NavigationContainer>
         <Stack.Navigator> 
           <Stack.Screen options={{ headerShown: false }} name="Login"  component={Login} navigation={navigation}/>
-          <Stack.Screen options={{ headerTintColor: '#083B66', title: 'Register New User', headerStyle: { backgroundColor: '#8FCBFF'} }} name="Register" component={Register} navigation={navigation} />
+          <Stack.Screen options={{ headerShown: false, headerTintColor: '#083B66', title: 'Register New User', headerStyle: { backgroundColor: '#8FCBFF'} }} name="Register" component={Register} navigation={navigation} />
           <Stack.Screen name="Home" component={Home} navigation={navigation} />
         </Stack.Navigator>
       </NavigationContainer>
@@ -26,7 +28,7 @@ function App( {navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#8FCBFF',
+    backgroundColor: 'rgba(8, 59, 102, .8)',
     alignItems: 'baseline',
     flexDirection: "row",
     justifyContent: 'space-evenly',

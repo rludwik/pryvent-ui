@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {TextInput, View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
-import { Ionicons, Entypo  } from '@expo/vector-icons';
+import { Entypo  } from '@expo/vector-icons';
+import { Checkbox } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import CheckBox from 'react-native-check-box';
+import getLoginClient from '../apiAuth/loggedinclient';
 export default class LoginForm extends Component {
 
   constructor() {
@@ -19,7 +20,9 @@ export default class LoginForm extends Component {
       phone3: null,
       email: null,
       reEmail: null,
-      isChecked: false
+      isChecked: false,
+      backToLogin: false,
+      placeholderTxtClr: 'rgba(200 , 200, 200, 0.5)'
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,6 +49,24 @@ export default class LoginForm extends Component {
     })
   }
 
+  onButtonPress = async () => {
+    const client = await getLoginClient();
+    const props = this.props.navigation;
+    client
+    .post('new-user/', {
+      username: this.state.username,
+      password: this.state.password,
+      phoneNumbers: [this.state.phone1, this.state.phone2,this.state.phone3],
+      email: this.state.email
+    })
+    .then(response => {
+      Alert.alert('Account created successfully', null, [{ text: 'OK'}],{ cancelable: false });
+      props.navigate('Login');
+    })
+    .catch(error => {
+    console.log(error);});
+  };
+  
   handleSubmit = () => {
     if(
       this.state.username === '' || 
@@ -65,9 +86,9 @@ export default class LoginForm extends Component {
     } else if (this.state.email !== this.state.reEmail) {
       Alert.alert('Emails do not match', null, [{ text: 'OK'}], { cancelable: false });
     } else {
-      Alert.alert('Account created successfully', null, [{ text: 'OK', onPress: () => console.log('OK Pressed') }],{ cancelable: false });
+      //The url is https://nameofthedomain.net/api/v1/contactSupport
+      this.onButtonPress();
     }
-    
   };
 
   handleUsername = input => this.setState({ username: input});
@@ -81,45 +102,40 @@ export default class LoginForm extends Component {
 
   render(){
     const { isPasswordShown } = this.state;
-    const AppButton = (props) => (
+    const AppButton1 = (props) => (
       <TouchableOpacity disabled={props.disabled} onPress={this.handleSubmit} style={styles.appButtonContainer}>
+        <Text style={styles.appButtonText}>{props.title}</Text>
+      </TouchableOpacity>
+    );
+
+    const AppButton2 = (props) => (
+      <TouchableOpacity disabled={props.disabled} onPress={() => props.navigation.navigate(props.nextPage)} style={styles.appButtonContainer}>
         <Text style={styles.appButtonText}>{props.title}</Text>
       </TouchableOpacity>
     );
     
     return (
-      
       <KeyboardAwareScrollView style={styles.outerContainer}>
         <View style={styles.innerContainer}>
-          <TextInput onChangeText={this.handleUsername} placeholder="Username" placeholderTextColor="#777" style={styles.input} />
+          <TextInput onChangeText={this.handleUsername} placeholder="Username" placeholderTextColor={this.state.placeholderTxtClr} style={styles.input} />
           <View style={styles.searchSection}>
-            <TextInput onChangeText={this.handlePass} placeholder="Password" placeholderTextColor="#777" style={styles.input} secureTextEntry={isPasswordShown ? false : true}/>
-            <TextInput onChangeText={this.handleRepass} placeholder="Confirm Password" placeholderTextColor="#777" style={styles.input} secureTextEntry={isPasswordShown ? false : true} />
-            <Entypo style={styles.searchIcon} onPress={this.togglePasswordVisiblity} name={isPasswordShown ? 'eye' : 'eye-with-line'} size={32} color='black' />
+            <TextInput onChangeText={this.handlePass} placeholder="Password" placeholderTextColor={this.state.placeholderTxtClr} style={styles.input} secureTextEntry={isPasswordShown ? false : true}/>
+            <TextInput onChangeText={this.handleRepass} placeholder="Confirm Password" placeholderTextColor={this.state.placeholderTxtClr} style={styles.input} secureTextEntry={isPasswordShown ? false : true} />
+            <Entypo style={styles.searchIcon} onPress={this.togglePasswordVisiblity} name={isPasswordShown ? 'eye' : 'eye-with-line'} size={25} color='rgba(230, 230, 230, 1)' />
           </View>
-          <TextInput onChangeText={this.handlePhone1} placeholder="Phone number 1" placeholderTextColor="#777" style={styles.input} />
-          <TextInput onChangeText={this.handlePhone2} placeholder="Phone number 2" placeholderTextColor="#777" style={styles.input} />
-          <TextInput onChangeText={this.handlePhone3} placeholder="Phone number 3" placeholderTextColor="#777" style={styles.input} />
-          <TextInput onChangeText={this.handleEmail} placeholder="Email Address" placeholderTextColor="#777" style={styles.input} />
-          <TextInput onChangeText={this.handleReEmail} placeholder="Confirm Email Address" placeholderTextColor="#777" style={styles.input} />
-          <CheckBox
-              style={{flex: 1, padding: 10}}
-              onClick={()=>{
-                this.setState({
-                    isChecked:!this.state.isChecked
-                })
-                console.log(!this.state.isChecked)
-              }}
-              isChecked={this.state.isChecked}
-              rightText={"Read our terms and conditions"}
-          />
+          <TextInput onChangeText={this.handlePhone1} placeholder="Phone number 1" placeholderTextColor={this.state.placeholderTxtClr} style={styles.input} />
+          <TextInput onChangeText={this.handlePhone2} placeholder="Phone number 2" placeholderTextColor={this.state.placeholderTxtClr} style={styles.input} />
+          <TextInput onChangeText={this.handlePhone3} placeholder="Phone number 3" placeholderTextColor={this.state.placeholderTxtClr} style={styles.input} />
+          <TextInput onChangeText={this.handleEmail} placeholder="Email Address" placeholderTextColor={this.state.placeholderTxtClr} style={styles.input} />
+          <TextInput onChangeText={this.handleReEmail} placeholder="Confirm Email Address" placeholderTextColor={this.state.placeholderTxtClr} style={styles.input} />
+          {/* <CheckBox tintColor='white' style={{flex: 1, padding: 10}} onClick={()=>{this.setState({isChecked:!this.state.isChecked})}} isChecked={this.state.isChecked} rightText={"Read our terms and conditions"}/> */}
+          <Checkbox color='white' status='checked' style={{borderColor: 'white', flex: 1, padding: 10}} onClick={()=>{this.setState({isChecked:!this.state.isChecked})}} isChecked={this.state.isChecked}/>
           <View style={{marginBottom: 180, alignContent: 'center', top: 50}}>
-            <AppButton disabled={!this.state.isChecked} title={this.state.isChecked ? 'Create Account' : 'Please accept Terms and Conditions'}  navigation={this.props.navigation} nextPage='Login'/>
-            <AppButton title="Return to Login Page" navigation={this.props.navigation} nextPage='Login'/>
+            <AppButton1 disabled={!this.state.isChecked} title={this.state.isChecked ? 'Create Account' : 'Please Accept Terms and Conditions'}  navigation={this.props.navigation} nextPage='Login'/>
+            <AppButton2 title="Return to Login Page" navigation={this.props.navigation} nextPage='Login'/>
           </View>
         </View>
       </KeyboardAwareScrollView>
-     
     )
   }
 }
@@ -128,35 +144,43 @@ const styles = StyleSheet.create({
   outerContainer: {
     padding: 15,
     alignContent: 'center',
-    backgroundColor: '#8FCBFF',
-    flex: 1
+    backgroundColor: 'rgba(8, 59, 102, 1)',
+    flex: 1,
   },
   innerContainer: {
-    top: 40,
+    top: 30,
     padding: 15,
     alignContent: 'center',
-    backgroundColor: '#8FCBFF',
     flex: 1
   },
   input: {
-   height: 40,
-   backgroundColor: 'rgba(255,255,255,0.75)',
-   marginBottom: 10,
-   borderRadius: 6,
-   paddingLeft: 10
+   height: 45,
+   color: 'rgba(230, 230, 230, 1)',
+  //  backgroundColor: 'rgba(255,255,255,0.75)',
+   backgroundColor: 'rgba(255,255,255,0)',
+   marginBottom: 15,
+   paddingLeft: 20,
+   borderRadius: 10,
+   fontSize: 16,
+   borderBottomWidth :1,
+   borderBottomColor: 'rgba(230 , 230, 230, 0.9)',
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.2,
+  shadowRadius: 3,
   },
   appButtonContainer: {
     elevation: 8,
     backgroundColor: "#083B66",
-    borderRadius: 6,
     padding: 10,
     alignContent: 'center',
     justifyContent: 'center',
     width: 'auto',
-    height: 40,
+    height: 45,
     textAlign: 'center',
     marginBottom: 10,
-    borderRadius: 7
+    borderRadius: 50,
+    fontSize: 16
   },
   appButtonText: {
     fontSize: 18,
@@ -166,7 +190,7 @@ const styles = StyleSheet.create({
   searchIcon: {
     position: 'absolute',
     left: '85%',
-    top: '3%'
+    top: '7%'
   },
   searchSection: {
     position: 'relative'
