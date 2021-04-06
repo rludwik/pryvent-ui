@@ -29,7 +29,7 @@ export default class LoginForm extends Component {
     const client = await getLoginClient();
     const props = this.props.navigation;
     client
-    .post('rest-auth/login/', {
+    .post('auth/login/', {
       username: this.state.username,
       password: this.state.password
     })

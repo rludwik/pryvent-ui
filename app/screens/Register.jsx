@@ -44,7 +44,7 @@ export default class LoginForm extends Component {
     const client = await getLoginClient();
     const props = this.props.navigation;
     client
-    .post('new-user/', {
+    .post('users/newuser', {
       username: this.state.username,
       password: this.state.password,
       phoneNumbers: [this.state.phone1, this.state.phone2,this.state.phone3],
