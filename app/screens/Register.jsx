@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {TextInput, View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import { Entypo  } from '@expo/vector-icons';
-import { Checkbox } from 'react-native-paper';
+import CheckBox from 'react-native-check-box'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import getLoginClient from '../apiAuth/loggedinclient';
+import TermsAndConditions from './TermsAndConditions';
 export default class LoginForm extends Component {
 
   constructor() {
@@ -22,19 +23,9 @@ export default class LoginForm extends Component {
       reEmail: null,
       isChecked: false,
       backToLogin: false,
-      placeholderTxtClr: 'rgba(200 , 200, 200, 0.5)'
+      placeholderTxtClr: 'rgba(200 , 200, 200, 0.5)',
+      acceptedTerms: false
     };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleUsername = this.handleUsername.bind(this);
-    this.handlePass = this.handlePass.bind(this);
-    this.handleRepass = this.handleRepass.bind(this);
-    this.handlePhone1 = this.handlePhone1.bind(this);
-    this.handlePhone2 = this.handlePhone2.bind(this);
-    this.handlePhone3 = this.handlePhone3.bind(this);
-    this.handleEmail = this.handleEmail.bind(this);
-    this.handleReEmail = this.handleReEmail.bind(this);
-    this.resetPasswords = this.resetPasswords.bind(this);
   }
 
   togglePasswordVisiblity = () => {
@@ -102,18 +93,19 @@ export default class LoginForm extends Component {
 
   render(){
     const { isPasswordShown } = this.state;
-    const AppButton1 = (props) => (
+    let termsAccepted = this.props.route.params.accepted;
+    const BtnCreateAccount = (props) => (
       <TouchableOpacity disabled={props.disabled} onPress={this.handleSubmit} style={styles.appButtonContainer}>
         <Text style={styles.appButtonText}>{props.title}</Text>
       </TouchableOpacity>
     );
 
-    const AppButton2 = (props) => (
-      <TouchableOpacity disabled={props.disabled} onPress={() => props.navigation.navigate(props.nextPage)} style={styles.appButtonContainer}>
+    const AppButton = (props) => (
+      <TouchableOpacity disabled={false} onPress={() => props.navigation.navigate(props.nextPage, {accepted: termsAccepted})} style={styles.appButtonContainer}>
         <Text style={styles.appButtonText}>{props.title}</Text>
       </TouchableOpacity>
     );
-    
+
     return (
       <KeyboardAwareScrollView style={styles.outerContainer}>
         <View style={styles.innerContainer}>
@@ -128,11 +120,13 @@ export default class LoginForm extends Component {
           <TextInput onChangeText={this.handlePhone3} placeholder="Phone number 3" placeholderTextColor={this.state.placeholderTxtClr} style={styles.input} />
           <TextInput onChangeText={this.handleEmail} placeholder="Email Address" placeholderTextColor={this.state.placeholderTxtClr} style={styles.input} />
           <TextInput onChangeText={this.handleReEmail} placeholder="Confirm Email Address" placeholderTextColor={this.state.placeholderTxtClr} style={styles.input} />
-          {/* <CheckBox tintColor='white' style={{flex: 1, padding: 10}} onClick={()=>{this.setState({isChecked:!this.state.isChecked})}} isChecked={this.state.isChecked} rightText={"Read our terms and conditions"}/> */}
-          <Checkbox color='white' status='checked' style={{borderColor: 'white', flex: 1, padding: 10}} onClick={()=>{this.setState({isChecked:!this.state.isChecked})}} isChecked={this.state.isChecked}/>
-          <View style={{marginBottom: 180, alignContent: 'center', top: 50}}>
-            <AppButton1 disabled={!this.state.isChecked} title={this.state.isChecked ? 'Create Account' : 'Please Accept Terms and Conditions'}  navigation={this.props.navigation} nextPage='Login'/>
-            <AppButton2 title="Return to Login Page" navigation={this.props.navigation} nextPage='Login'/>
+          <View style={{flex:1}}>
+            <AppButton title={termsAccepted ? "View Accepted Terms and Conditions" : "Click For Terms and Conditions" } navigation={this.props.navigation} nextPage='Terms'/>
+            {termsAccepted && <BtnCreateAccount title={'Create Account'} /> }
+            {/* <TouchableOpacity disabled={false} onPress={() => alert(termsAccepted)} style={styles.appButtonContainer}>
+              <Text style={styles.appButtonText}>Alert state</Text>
+            </TouchableOpacity> */}
+            <AppButton title={"Return to Login Page"} navigation={this.props.navigation} nextPage='Login'/>
           </View>
         </View>
       </KeyboardAwareScrollView>
@@ -170,7 +164,6 @@ const styles = StyleSheet.create({
   shadowRadius: 3,
   },
   appButtonContainer: {
-    elevation: 8,
     backgroundColor: "#083B66",
     padding: 10,
     alignContent: 'center',
