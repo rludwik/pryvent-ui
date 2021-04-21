@@ -29,7 +29,7 @@ export default class LoginForm extends Component {
     const client = await getLoginClient();
     const props = this.props.navigation;
     client
-    .post('rest-auth/login/', {
+    .post('auth/login/', {
       username: this.state.username,
       password: this.state.password
     })
@@ -66,7 +66,7 @@ export default class LoginForm extends Component {
     );
 
     const AppButton2 = (props) => (
-      <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')} style={styles.appButtonContainer}>
+      <TouchableOpacity onPress={() => this.props.navigation.navigate('Register', {accepted: false})} style={styles.appButtonContainer}>
         <Text style={styles.appButtonText}>{props.title}</Text>
       </TouchableOpacity>
     );
@@ -79,9 +79,9 @@ export default class LoginForm extends Component {
           <View>
             <Text>
               <Entypo onPress={this.togglePasswordVisiblity} name={this.state.isPasswordShown ? 'eye' : 'eye-with-line'} size={20} color='black' />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Text>Forgot Password?</Text>
+
+             {/* Line 85's style injection should center forgot password text */}
+              <Text style={styles.forgotPassword}>Forgot Password?</Text>
             </Text>
           </View>
         </View>
@@ -127,4 +127,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     alignSelf: "center",
   },
+  forgotPassword: {
+    flex: 1,
+     justifyContent: 'center',
+      alignItems: 'center' 
+
+  }
 })

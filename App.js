@@ -6,6 +6,7 @@ import Login from './app/screens/Login';
 import Register from './app/screens/Register';
 import Home from './app/screens/Home';
 import { LinearGradient } from 'expo-linear-gradient';
+import TermsAndConditions from './app/screens/TermsAndConditions';
 
  
 const Stack = createStackNavigator();
@@ -19,6 +20,7 @@ function App( {navigation}) {
           <Stack.Screen options={{ headerShown: false }} name="Login"  component={Login} navigation={navigation}/>
           <Stack.Screen options={{ headerShown: false, headerTintColor: '#083B66', title: 'Register New User', headerStyle: { backgroundColor: '#8FCBFF'} }} name="Register" component={Register} navigation={navigation} />
           <Stack.Screen name="Home" component={Home} navigation={navigation} />
+          <Stack.Screen options={{ headerShown: false }} name="Terms" component={TermsAndConditions} navigation={navigation} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
