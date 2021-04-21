@@ -79,9 +79,9 @@ export default class LoginForm extends Component {
           <View>
             <Text>
               <Entypo onPress={this.togglePasswordVisiblity} name={this.state.isPasswordShown ? 'eye' : 'eye-with-line'} size={20} color='black' />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Text>Forgot Password?</Text>
+
+             {/* Line 85's style injection should center forgot password text */}
+              <Text style={styles.forgotPassword}>Forgot Password?</Text>
             </Text>
           </View>
         </View>
@@ -127,4 +127,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     alignSelf: "center",
   },
+  forgotPassword: {
+    flex: 1,
+     justifyContent: 'center',
+      alignItems: 'center' 
+
+  }
 })
